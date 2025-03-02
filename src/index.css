@@ -1,0 +1,421 @@
+:root {
+  --bg-color: #0a0a0a;
+  --header-bg: #111111;
+  --text-primary: #00ff00;
+  --text-secondary: #00cc00;
+  --text-dim: #006600;
+  --border-color: #1a1a1a;
+  --hover-color: rgba(0, 255, 0, 0.1);
+  font-family: 'Courier New', monospace;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* Header styles */
+.app-header {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-divider {
+  color: var(--text-dim);
+  font-size: 1.2rem;
+}
+
+/* Brand styles */
+.brand {
+  cursor: pointer;
+}
+
+.brand h1 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: var(--text-primary);
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Section title */
+.section-title {
+  font-size: 1rem;
+  margin: 0;
+  color: var(--text-secondary);
+  font-weight: normal;
+}
+
+/* Profile and Upload buttons */
+.profile-button,
+.upload-button {
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.profile-button:hover,
+.upload-button:hover {
+  background: var(--hover-color);
+}
+
+.profile-button svg,
+.upload-button svg {
+  width: 20px;
+  height: 20px;
+  color: var(--text-primary);
+}
+
+/* Dropdown styles */
+.profile-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--header-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem;
+  min-width: 220px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-header {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.wallet-info {
+  padding: 0.75rem 0.5rem;
+}
+
+.wallet-address-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-color);
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.wallet-address {
+  font-family: 'Courier New', monospace;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.copy-button {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 0.2rem;
+  transition: color 0.2s ease;
+}
+
+.copy-button:hover {
+  color: var(--text-primary);
+}
+
+/* News Feed styles */
+.articles-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.article-card {
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.article-card:hover {
+  background: var(--hover-color);
+  border-color: var(--text-dim);
+}
+
+.article-card h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.article-meta {
+  margin-top: 0.5rem;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.article-tags {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.tag {
+  background: var(--header-bg);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  border: 1px solid var(--border-color);
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+/* Connect button */
+.connect-wallet-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: none;
+  border: 1px solid var(--text-dim);
+  color: var(--text-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+.connect-wallet-btn:hover {
+  background: var(--hover-color);
+  border-color: var(--text-primary);
+}
+
+/* Copy notification */
+.copy-notification {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  background: var(--header-bg);
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  border: 1px solid var(--text-dim);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0.5rem;
+  }
+
+  .header-divider {
+    display: none;
+  }
+
+  .section-title {
+    font-size: 0.9rem;
+  }
+
+  .articles-grid {
+    padding: 0.5rem;
+  }
+}
+
+/* Submission Form Styles */
+.submission-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.submission-form {
+  background: var(--header-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.form-header {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.prompt {
+  color: var(--text-primary);
+  margin-right: 0.5rem;
+}
+
+.hint {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.terminal-input {
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.terminal-input:focus {
+  outline: none;
+  border-color: var(--text-secondary);
+  box-shadow: 0 0 0 2px rgba(0, 255, 0, 0.1);
+}
+
+.terminal-input::placeholder {
+  color: var(--text-dim);
+}
+
+textarea.terminal-input {
+  resize: vertical;
+  min-height: 200px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 1rem;
+  background: var(--bg-color);
+  border: 1px solid var(--text-secondary);
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: var(--hover-color);
+  border-color: var(--text-primary);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loading {
+  display: inline-block;
+  position: relative;
+}
+
+.loading:after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--text-primary);
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Tags styles in submission form */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  min-height: 38px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--header-bg);
+  border: 1px solid var(--text-dim);
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+
+.remove-tag {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.2rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-tag:hover {
+  color: var(--text-primary);
+}
