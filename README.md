@@ -2,7 +2,7 @@
 
 CipherPress is a decentralized news platform that enables anonymous and censorship-resistant publishing using blockchain technology and IPFS.
 
-![CipherPress Screenshot](screenshot.png)
+![CipherPress Screenshot](src/assets/screenshot1.png)
 
 ## Features
 
