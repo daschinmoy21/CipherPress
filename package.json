@@ -8,13 +8,17 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "ethers": "^6.13.5",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "hardhat": "^2.22.19",
     "typescript": "^4.0.0",
     "vite": "^6.2.0"
   },
