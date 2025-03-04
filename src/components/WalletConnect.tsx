@@ -1,66 +1,75 @@
 import React, { useState, useEffect } from 'react';
+import { walletService } from '../services/wallet';
 
 const WalletConnect: React.FC = () => {
-  const [account, setAccount] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [address, setAddress] = useState<string | null>(null);
+  const [networkName, setNetworkName] = useState<string>('');
 
-  useEffect(() => {
-    console.log('WalletConnect mounted');
-    const checkMetaMask = async () => {
-      console.log('Checking MetaMask...');
-      console.log('window.ethereum:', window.ethereum);
-      try {
-        if (typeof window.ethereum !== 'undefined') {
-          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-          console.log('Found accounts:', accounts);
-          if (accounts && accounts.length > 0) {
-            setAccount(accounts[0]);
-          }
-        } else {
-          console.log('MetaMask not found');
-          setError('MetaMask is not installed. Please install it to use this app.');
-        }
-      } catch (err) {
-        console.error('Error checking MetaMask:', err);
-        setError('Failed to connect to MetaMask.');
-      }
-    };
-
-    checkMetaMask();
-  }, []);
-
-  const connectWallet = async () => {
-    console.log('Connecting wallet...');
+  const updateNetworkName = async () => {
+    if (!window.ethereum) return;
+    
     try {
-      if (typeof window.ethereum !== 'undefined') {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        console.log('Connected accounts:', accounts);
-        if (accounts && accounts.length > 0) {
-          setAccount(accounts[0]);
-          setError(null);
-        }
-      } else {
-        console.log('MetaMask not found');
-        setError('MetaMask is not installed. Please install it to use this app.');
-      }
-    } catch (err) {
-      console.error('Error connecting to MetaMask:', err);
-      setError('Failed to connect to MetaMask.');
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      const networks: { [key: string]: string } = {
+        '0x1': 'Ethereum Mainnet',
+        '0x5': 'Goerli Testnet',
+        '0xaa36a7': 'Sepolia Testnet',
+        '0x7a69': 'Hardhat Local',
+        '0x13881': 'Mumbai Testnet'
+      };
+      
+      setNetworkName(networks[chainId] || `Chain ID: ${chainId}`);
+    } catch (error) {
+      console.error('Failed to get network:', error);
+      setNetworkName('Unknown Network');
     }
   };
 
-  console.log('Rendering WalletConnect', { account, error });
+  useEffect(() => {
+    // Check initial connection
+    walletService.checkConnection().then(addr => {
+      setAddress(addr);
+      if (addr) updateNetworkName();
+    });
+
+    // Listen for network changes
+    if (window.ethereum) {
+      window.ethereum.on('chainChanged', () => {
+        updateNetworkName();
+      });
+    }
+
+    return () => {
+      // Cleanup listeners
+      if (window.ethereum?.removeListener) {
+        window.ethereum.removeListener('chainChanged', updateNetworkName);
+      }
+    };
+  }, []);
+
+  const handleConnect = async () => {
+    try {
+      const addr = await walletService.connectWallet();
+      setAddress(addr);
+      await updateNetworkName();
+    } catch (error) {
+      console.error('Failed to connect:', error);
+    }
+  };
 
   return (
     <div className="wallet-connect">
-      {error && <p className="error">{error}</p>}
-      {account ? (
-        <div>
-          <p>Connected account:</p>
-          <p className="account">{account}</p>
+      {address ? (
+        <div className="wallet-info">
+          <span className="network">{networkName}</span>
+          <span className="address">
+            {address.substring(0, 6)}...{address.slice(-4)}
+          </span>
         </div>
       ) : (
-        <button onClick={connectWallet}>Connect MetaMask</button>
+        <button onClick={handleConnect} className="connect-button">
+          Connect Wallet
+        </button>
       )}
     </div>
   );

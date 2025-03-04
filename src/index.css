@@ -419,3 +419,183 @@ textarea.terminal-input {
 .remove-tag:hover {
   color: var(--text-primary);
 }
+
+/* Add to your existing styles */
+
+.ipfs-link {
+  color: var(--text-dim);
+  font-family: monospace;
+  cursor: pointer;
+}
+
+.ipfs-link:hover {
+  color: var(--text-primary);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #ff4444;
+  background: rgba(255, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-dim);
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  margin: 2rem;
+}
+
+.error-message {
+  color: #ff4444;
+  background: rgba(255, 0, 0, 0.1);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+/* Add these to your existing styles */
+
+.success-message {
+  background: rgba(0, 255, 0, 0.1);
+  color: var(--text-primary);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--text-secondary);
+}
+
+.submit-button .success {
+  color: var(--text-primary);
+}
+
+/* Loading spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid var(--text-dim);
+  border-top: 2px solid var(--text-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add this to your existing CSS */
+.clear-cache-btn {
+  margin-left: 10px;
+  background-color: var(--text-dim);
+  color: var(--bg-color);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.clear-cache-btn:hover {
+  background-color: var(--text-primary);
+}
+
+.error-message {
+  background-color: rgba(255, 0, 0, 0.1);
+  border-left: 3px solid red;
+  padding: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Hacker News style updates */
+.articles-list {
+  background: var(--bg-color);
+  padding: 0;
+}
+
+.article-item {
+  display: flex;
+  padding: 0.3rem 0;
+  line-height: 1.4;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.article-index {
+  color: var(--text-dim);
+  width: 2rem;
+  text-align: right;
+  padding-right: 0.5rem;
+}
+
+.article-content {
+  flex: 1;
+}
+
+.article-title {
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.article-title:hover {
+  text-decoration: underline;
+}
+
+.article-meta {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.article-meta span:not(:last-child)::after {
+  content: '|';
+  margin: 0 0.5rem;
+  color: var(--border-color);
+}
+
+/* Article Detail View */
+.article-detail {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.article-header {
+  margin-bottom: 2rem;
+}
+
+.article-header h1 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.article-content {
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.back-button {
+  margin-top: 2rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-color);
+  border: 1px solid var(--text-dim);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.back-button:hover {
+  border-color: var(--text-primary);
+}

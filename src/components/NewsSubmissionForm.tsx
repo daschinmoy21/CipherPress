@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ipfsService } from '../services/ipfs';
+import { storageService } from '../services/storage';
+import type { NewsSubmission } from '../types/news';
 
-interface NewsSubmission {
-  title: string;
-  content: string;
-  tags: string[];
+interface Props {
+  account: string | null;
+  onSubmitSuccess?: () => void;
 }
 
-const NewsSubmissionForm: React.FC = () => {
+const NewsSubmissionForm: React.FC<Props> = ({ account, onSubmitSuccess }) => {
   const [formData, setFormData] = useState<NewsSubmission>({
     title: '',
     content: '',
@@ -14,6 +16,37 @@ const NewsSubmissionForm: React.FC = () => {
   });
   const [tagInput, setTagInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [networkName, setNetworkName] = useState<string>('');
+
+  // Get network name on mount
+  useEffect(() => {
+    const fetchNetworkName = async () => {
+      if (!window.ethereum) return 'No Web3 Provider';
+      
+      try {
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        
+        // Network mapping
+        const networks: { [key: string]: string } = {
+          '0x1': 'Ethereum Mainnet',
+          '0x5': 'Goerli Testnet',
+          '0xaa36a7': 'Sepolia Testnet',
+          '0x7a69': 'Hardhat Local', // 31337 in hex
+          '0x13881': 'Mumbai Testnet'
+        };
+
+        setNetworkName(networks[chainId] || `Chain ID: ${chainId}`);
+      } catch (error) {
+        console.error('Failed to get network:', error);
+        setNetworkName('Unknown Network');
+      }
+    };
+
+    fetchNetworkName();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -45,15 +78,62 @@ const NewsSubmissionForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaving(true);
-    // Placeholder for IPFS submission
-    console.log('Submitting news:', formData);
-    setTimeout(() => setIsSaving(false), 1000); // Simulate submission
+    if (!account) {
+      setError('Please connect your wallet to publish');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitStatus('submitting');
+    setError(null);
+
+    try {
+      const article = {
+        ...formData,
+        id: `${Date.now()}-${account}`,
+        timestamp: Date.now(),
+        author: account
+      };
+
+      const cid = await ipfsService.uploadArticle(article);
+      await storageService.storeCID(cid);
+      
+      // Cache the article locally to avoid CORS issues
+      localStorage.setItem(`ipfs-article-${cid}`, JSON.stringify({
+        ...formData,
+        id: cid,
+        author: account,
+        timestamp: Date.now(),
+        cid
+      }));
+      
+      setSubmitStatus('success');
+      // Reset form
+      setFormData({ title: '', content: '', tags: [] });
+      
+      // Show success message before redirecting
+      setTimeout(() => {
+        onSubmitSuccess?.();
+      }, 1500);
+      
+    } catch (err) {
+      console.error('Failed to upload article:', err);
+      setError('Failed to publish article. Please try again.');
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="submission-container">
       <form onSubmit={handleSubmit} className="submission-form">
+        {error && <div className="error-message">{error}</div>}
+        {submitStatus === 'success' && (
+          <div className="success-message">
+            Article published successfully! Redirecting...
+          </div>
+        )}
         <div className="form-header">
           <span className="prompt">$</span> New Article
         </div>
@@ -121,9 +201,19 @@ const NewsSubmissionForm: React.FC = () => {
           )}
         </div>
 
-        <button type="submit" className="submit-button" disabled={isSaving}>
-          {isSaving ? (
+        <div className="network-info">
+          Publishing to {networkName}
+        </div>
+
+        <button 
+          type="submit" 
+          className="submit-button" 
+          disabled={isSubmitting}
+        >
+          {submitStatus === 'submitting' ? (
             <span className="loading">Publishing...</span>
+          ) : submitStatus === 'success' ? (
+            <span className="success">Published!</span>
           ) : (
             <>
               <span className="prompt">&gt;</span> Publish to IPFS

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { networks } from '../config/networks';
 
 interface ProfileDropdownProps {
   account: string | null;
@@ -37,6 +38,14 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ account, onConnect })
 
   const toggleAddressDisplay = () => {
     setShowFullAddress(!showFullAddress);
+  };
+
+  const getNetworkInfo = () => {
+    const network = import.meta.env.DEV ? networks.sepolia : networks.mainnet;
+    return {
+      name: network.name,
+      currency: network.currency.symbol
+    };
   };
 
   return (
@@ -94,6 +103,9 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ account, onConnect })
                     </svg>
                   </button>
                 </div>
+              </div>
+              <div className="network-badge">
+                {getNetworkInfo().name}
               </div>
             </>
           ) : (

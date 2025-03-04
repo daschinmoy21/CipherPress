@@ -1,81 +1,159 @@
-# CipherPress - Decentralized News Platform
+# CipherPress
 
-CipherPress is a decentralized news platform that enables anonymous and censorship-resistant publishing using blockchain technology and IPFS.
-
-![CipherPress Screenshot](src/assets/screenshot1.png)
+A decentralized news platform built with React, IPFS, and Ethereum. Articles are stored on IPFS and indexed on the blockchain, creating a censorship-resistant news platform.
 
 ## Features
 
-- 🔐 **Decentralized Publishing**: Articles are stored on IPFS, ensuring censorship resistance
-- 👤 **Anonymous Posting**: Connect with MetaMask wallet for pseudonymous publishing
-- 🏷️ **Content Organization**: Tag-based article categorization
-- 💻 **Terminal-Inspired UI**: Clean, minimalist interface with a cyberpunk aesthetic
-- 📱 **Responsive Design**: Works seamlessly across desktop and mobile devices
+- Decentralized content storage using IPFS (Helia)
+- On-chain article indexing using Ethereum
+- Web3 authentication with MetaMask
+- Local caching for fast development
+- Tag-based article organization
+- Hacker News-inspired minimalist UI
+- Terminal-inspired theme
+
+## Tech Stack
+
+- Frontend: React + TypeScript + Vite
+- Smart Contracts: Solidity + Hardhat
+- Storage: IPFS (Helia)
+- Blockchain: Ethereum (Local/Sepolia/Mainnet)
+- Web3: ethers.js + MetaMask
+
+## UI Features
+
+- Clean, minimalist article listing
+- Numbered entries like Hacker News
+- Full-screen article view
+- Tag system for categorization
+- Terminal-inspired dark theme
+- Responsive design
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or later)
+- Node.js 16+
 - MetaMask browser extension
-- Modern web browser
+- Git
 
 ### Installation
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/yourusername/cipherpress.git
    cd cipherpress
    ```
 
 2. Install dependencies:
-
    ```bash
    npm install
    ```
 
-3. Start the development server:
+3. Create environment files:
+   ```bash
+   cp .env.example .env
+   cp .env.example .env.development
+   ```
 
+4. Update environment variables in `.env`:
+   ```env
+   PRIVATE_KEY=your_private_key_here
+   SEPOLIA_RPC_URL=your_rpc_url
+   ETHERSCAN_API_KEY=your_api_key
+   ```
+
+### Local Development and Testing
+
+1. Start a local Hardhat blockchain:
+   ```bash
+   npm run node
+   ```
+
+2. Deploy the contract:
+   ```bash
+   npm run deploy:local
+   ```
+
+3. Configure MetaMask:
+   - Network Name: `Hardhat Local`
+   - RPC URL: `http://127.0.0.1:8545`
+   - Chain ID: `31337`
+   - Currency: `ETH`
+
+4. Start the development server:
    ```bash
    npm run dev
    ```
 
-4. Open http://localhost:3000 in your browser
+### Testing the Application
 
-### Usage
-
-1. **Connect Wallet**
+1. **Connect Your Wallet**:
    - Click the profile icon in the top right
-   - Connect your MetaMask wallet
+   - Connect with MetaMask
+   - Ensure you're on the Hardhat Local network
 
-2. **Browse Articles**
-   - View all articles on the main feed
-   - Filter by tags
-   - Click articles to read full content
+2. **Create an Article**:
+   - Click the upload icon in the header
+   - Fill in the title and content
+   - Add some tags (press Enter after each tag)
+   - Click "Publish to IPFS"
+   - Confirm the transaction in MetaMask
 
-3. **Publish Content**
-   - Click the upload icon
-   - Fill in title, content, and tags
-   - Submit to publish to IPFS
+3. **View Articles**:
+   - Return to the feed (click CipherPress logo)
+   - Your article should appear at the top
+   - Click the title to view full article
+   - Articles are numbered like Hacker News
 
-## Contributing
+4. **Run Tests**:
+   ```bash
+   # Start local blockchain
+   npm run node
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+   # Deploy contract (in new terminal)
+   npm run deploy:local
+   
+   # Run contract tests
+   npm run test:contract
+   
+   # Test IPFS integration
+   npm run test:ipfs
+   
+   # Run full integration test
+   npm run test:all
+   ```
 
-## Security
+5. **Contract Testing Details**:
+   - Tests contract deployment
+   - Validates article publishing
+   - Checks title and CID requirements
+   - Verifies article retrieval
+   - Tests pagination functionality
 
-- All content is stored on IPFS
-- No central database or server
-- Wallet connections are secure through MetaMask
-- No personal data collection
+6. **Manual Testing**:
+   ```javascript
+   // In browser console
+   // Get total articles
+   const count = await contract.getNewsCount();
+   console.log('Total articles:', count.toString());
+   
+   // Get latest 5 articles
+   const latest = await contract.getLatestArticles(5);
+   console.log('Latest articles:', latest);
+   ```
+
+### Troubleshooting
+
+If you encounter CORS errors or issues with article loading:
+
+1. Open browser console (F12)
+2. Clear the cache:
+   ```javascript
+   import { clearIPFSCache } from './utils/debug';
+   clearIPFSCache();
+   ```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-- Join our [Discord](https://discord.gg/cipherpress)
-- Follow us on [Twitter](https://twitter.com/cipherpress)
-- Report issues on [GitHub](https://github.com/yourusername/cipherpress/issues)
+MIT

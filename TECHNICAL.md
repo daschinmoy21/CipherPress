@@ -2,9 +2,137 @@
 
 ## Architecture Overview
 
-CipherPress is built using React with TypeScript, leveraging Web3 technologies for decentralized content storage and user authentication.
+CipherPress combines blockchain indexing with IPFS storage and local caching, featuring a minimalist Hacker News-inspired UI.
 
-### Tech Stack
+### Core Components
+
+1. **Smart Contract (CipherPress.sol)**
+   - Stores article CIDs and metadata
+   - Maps CIDs to authors
+   - Maintains chronological article index
+
+2. **IPFS Service (ipfs.ts)**
+   - Uses Helia for IPFS integration
+   - Handles content upload and retrieval
+   - Implements local caching strategy
+
+3. **Storage Service (storage.ts)**
+   - Manages blockchain interactions
+   - Handles CID indexing
+   - Filters available content in development
+
+4. **UI Components**
+   - NewsFeed: Hacker News-style article listing
+   - ArticleDetail: Full-screen article view
+   - NewsSubmissionForm: Article creation
+   - Navigation: View switching
+   - ProfileDropdown: Wallet management
+
+## Implementation Details
+
+### UI Architecture
+
+1. **News Feed Layout**:
+   ```typescript
+   <div className="article-item">
+     <div className="article-index">{index + 1}.</div>
+     <div className="article-content">
+       <div className="article-title">{title}</div>
+       <div className="article-meta">
+         <span>{timestamp}</span>
+         <span>by {author}</span>
+         <span>{tags}</span>
+       </div>
+     </div>
+   </div>
+   ```
+
+2. **Article Detail View**:
+   ```typescript
+   <div className="article-detail">
+     <div className="article-header">
+       <h1>{title}</h1>
+       <div className="article-meta">...</div>
+     </div>
+     <div className="article-content">{content}</div>
+   </div>
+   ```
+
+### Styling System
+
+```css
+:root {
+  --bg-color: #0a0a0a;
+  --text-primary: #00ff00;
+  --text-secondary: #00cc00;
+  --text-dim: #006600;
+  --border-color: #1a1a1a;
+}
+```
+
+### Local Caching Strategy
+
+1. **Storage Pattern**:
+   ```typescript
+   localStorage.setItem(`ipfs-article-${cid}`, content)
+   ```
+
+2. **Retrieval Pattern**:
+   ```typescript
+   const cached = localStorage.getItem(`ipfs-article-${cidString}`)
+   if (cached) return JSON.parse(cached)
+   ```
+
+### Navigation System
+
+- React Router for article detail views
+- Custom view state for feed/submit toggle
+- MetaMask integration for wallet connection
+
+## Production Considerations
+
+### IPFS Configuration
+
+1. **Node Setup**:
+   - Configure proper IPFS node
+   - Set up CORS headers
+   - Implement content pinning
+
+2. **Gateway Strategy**:
+   - Multiple gateway fallbacks
+   - Local node priority
+   - Caching optimization
+
+### Performance Optimizations
+
+1. **Content Loading**:
+   - Progressive article loading
+   - Cached content priority
+   - Lazy image loading
+
+2. **State Management**:
+   - Local storage caching
+   - Optimistic updates
+   - Error boundary implementation
+
+## Future Improvements
+
+1. **Content Features**:
+   - Comment system
+   - Article voting
+   - User profiles
+
+2. **UI Enhancements**:
+   - Advanced search
+   - Tag filtering
+   - Sort options
+
+3. **Technical Updates**:
+   - Layer 2 integration
+   - Content compression
+   - Enhanced caching
+
+## Tech Stack
 
 - **Frontend**: React 18 with TypeScript
 - **Build Tool**: Vite

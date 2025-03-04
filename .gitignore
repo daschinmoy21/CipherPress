@@ -135,4 +135,9 @@ artifacts
 
 # Foundry
 out/
-cache/ 
+cache/
+
+# Environment variables
+.env
+.env.local
+.env.*.local 
