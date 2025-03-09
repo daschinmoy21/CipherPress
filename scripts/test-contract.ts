@@ -13,22 +13,15 @@ describe("CipherPress", function() {
     it("Should publish an article", async function() {
       const { contract, owner } = await deployContract();
       const cid = "QmTest123";
-      const title = "Test Article";
 
-      await expect(contract.publishArticle(cid, title))
+      await expect(contract.publishArticle(cid))
         .to.emit(contract, "ArticlePublished")
-        .withArgs(cid, title, owner.address, await ethers.provider.getBlock("latest").then(b => b!.timestamp));
-    });
-
-    it("Should reject empty title", async function() {
-      const { contract } = await deployContract();
-      await expect(contract.publishArticle("QmTest123", ""))
-        .to.be.revertedWith("Title cannot be empty");
+        .withArgs(cid, owner.address, await ethers.provider.getBlock("latest").then(b => b!.timestamp));
     });
 
     it("Should reject empty CID", async function() {
       const { contract } = await deployContract();
-      await expect(contract.publishArticle("", "Test"))
+      await expect(contract.publishArticle(""))
         .to.be.revertedWith("CID cannot be empty");
     });
   });

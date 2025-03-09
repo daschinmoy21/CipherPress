@@ -24,6 +24,7 @@ contract CipherPress {
 
     // Functions
     function publishArticle(string memory _cid) public {
+        require(bytes(_cid).length > 0, "CID cannot be empty");
         require(!articles[_cid].exists, "Article already exists");
         
         articles[_cid] = Article({
